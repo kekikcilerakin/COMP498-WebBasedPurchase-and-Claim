@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
 </head>
 
 <body>
@@ -27,11 +27,10 @@
 
     // Check if user is logged in
     if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-        ?>
-        <div></div>
-        <?php
+        //
     } else {
-        readfile('a.html');
+        header("Location: login.php");
+        die();
     }
     ?>
 </body>
