@@ -1,6 +1,6 @@
 <?php
-// Include config file
-require_once "connection.php";
+
+require_once "../connection.php";
 
 // Define variables and initialize with empty values
 $username = $password = $confirm_password = "";
@@ -89,15 +89,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  
 <!DOCTYPE html>
 <html lang="en">
+    
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="login-register.css">
-    <style>
-
-    </style>
+    <link rel="stylesheet" href="login_register_styles.css">
 </head>
+
 <body>
     <div class="wrapper">
         <h2>Sign Up</h2>

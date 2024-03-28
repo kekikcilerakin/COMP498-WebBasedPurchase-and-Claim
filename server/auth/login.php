@@ -1,14 +1,14 @@
 <?php
-// Initialize the session
+
 session_start();
 
 // Redirect to index if user is already logged in
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    header("location: index.php");
+    header("location: ../index.php");
     exit;
 }
 
-require_once "connection.php";
+require_once "../connection.php";
 
 // Define variables and initialize with empty values
 $username = $password = "";
@@ -32,11 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate credentials
     if (empty($username_err) && empty($password_err)) {
 
-        $sql = "SELECT id, username, password FROM users WHERE username = ?";
+        $sql = "SELECT id, username, password FROM users WHERE BINARY username = ?";
 
         if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("s", $param_username);
-            $param_username = $username;
+            $stmt->bind_param("s", $username);
 
             if ($stmt->execute()) {
                 $stmt->store_result();
@@ -54,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["username"] = $username;
 
                             // Redirect user to welcome page
-                            header("location: index.php");
+                            header("location: ../index.php");
                             exit;
                         } else {
                             // Password is not valid
@@ -85,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="login-register.css">
+    <link rel="stylesheet" href="login_register_styles.css">
 </head>
 
 <body>
