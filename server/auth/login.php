@@ -10,7 +10,6 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 
 require_once "../connection.php";
 
-// Define variables and initialize with empty values
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
 
