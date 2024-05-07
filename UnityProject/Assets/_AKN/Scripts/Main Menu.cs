@@ -23,4 +23,9 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene(2);
     }
+
+    public void GoTogGame()
+    {
+        SceneManager.LoadScene(3);
+    }
 }
