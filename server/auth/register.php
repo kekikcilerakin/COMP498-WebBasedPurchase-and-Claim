@@ -3,8 +3,8 @@
 require_once "../connection.php";
 
 // Define variables and initialize with empty values
-$username = $password = $confirm_password = "";
-$username_err = $password_err = $confirm_password_err = "";
+$username = $password = "";
+$username_err = $password_err = "";
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -29,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if ($stmt->num_rows == 1) {
                     $username_err = "This username is already taken.";
+
                 }
             } else {
                 echo "Oops! Something went wrong. Please try again later.";
@@ -45,18 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password_err = "Please enter a password.";
     } elseif (strlen($password) < 6) {
         $password_err = "Password must have at least 6 characters.";
-    }
 
-    // Validate confirm password
-    $confirm_password = trim($_POST["confirm_password"]);
-    if (empty($confirm_password)) {
-        $confirm_password_err = "Please confirm password.";
-    } elseif ($password !== $confirm_password) {
-        $confirm_password_err = "Password did not match.";
     }
 
     // Check input errors before inserting in database
-    if (empty($username_err) && empty($password_err) && empty($confirm_password_err)) {
+    if (empty($username_err) && empty($password_err)) {
         // Prepare an insert statement
         $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
 
@@ -86,7 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
- 
 <!DOCTYPE html>
 <html lang="en">
     
@@ -111,11 +104,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label>Password</label>
                 <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
                 <span class="invalid-feedback"><?php echo $password_err; ?></span>
-            </div>
-            <div class="form-group">
-                <label>Confirm Password</label>
-                <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $confirm_password; ?>">
-                <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Register">

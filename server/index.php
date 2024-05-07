@@ -18,30 +18,25 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-$username = $_SESSION["username"];
+if(isset($_SESSION["username"])) {
+    $username = $_SESSION["username"];
 
-// SQL query to retrieve the gold value for the user
-$sql_gold = "SELECT gold FROM users WHERE username = '$username'";
-$sql_isAdmin = "SELECT is_admin FROM users WHERE username = '$username'";
+    $sql = "SELECT gold, is_admin FROM users WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->bind_result($gold_value, $is_admin);
+    $stmt->fetch();
+    $stmt->close();
 
-$result_gold = $conn->query($sql_gold);
-$result_admin = $conn->query($sql_isAdmin);
+    // if(isset($gold_value)) {
+    //     echo "Logged in as: $username <br> Gold: $gold_value<br>";
+    // } else {
+    //     echo "err: No gold value<br>";
+    // }
 
-if ($result_gold->num_rows > 0) {
-    while($row = $result_gold->fetch_assoc()) {
-        $gold_value = $row["gold"];
-        echo "$username Gold:  $gold_value";
-    }
 } else {
-    echo "no gold";
-}
-
-if ($result_admin->num_rows > 0) {
-    while($row = $result_admin->fetch_assoc()) {
-        $is_admin = $row["is_admin"];
-    }
-} else {
-    echo "no is admin";
+    echo "Username not found in session";
 }
 
 ?>
@@ -53,33 +48,74 @@ if ($result_admin->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COMP 498 - Purchase Items</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+    <nav class="navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand"><?php echo $username; ?> / Gold: <?php echo $gold_value; ?></a>
+        <form class="form-inline my-2 my-lg-0" action="" method="post">
+        <input class="form-control mr-sm-2" type="submit" value="Logout">
+        </form>
+    </div>
+    </nav>
+
+<?php
+$itemsQuery = "SELECT name, description, image_url, price FROM items";
+$result = $conn->query($itemsQuery);
+?>
+
+<div class="item-container">
+    <?php if ($result->num_rows > 0): ?>
+        <?php foreach ($result as $item): ?>
+            <div class="item">
+                <img class="item-image" src="<?php echo $item['image_url']; ?>">
+                <br>
+                <h5><?php echo $item['name']; ?></h5>
+                <h6>Price: <?php echo $item['price']; ?></h6>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
+
+
 
     <?php if ($is_admin) : ?>
-    <form action="admin/insert_item.php" method="post">
-        <label for="item_name">Item Name:</label><br>
-        <input type="text" id="item_name" name="item_name" required><br><br>
+    <div class="create-item-div">
+        <h2>Create a New Item</h2>
+        <hr>
+        
+        <form action="admin/insert_item.php" method="post">
+        <div class="form-group">
+            <label for="item_name">Name</label><br>
+            <input class="form-control" ype="text" id="item_name" name="item_name" required>
+        </div>
 
-        <label for="item_description">Description:</label><br>
-        <textarea id="item_description" name="item_description" rows="4" cols="50" required></textarea><br><br>
-
-        <label for="item_image_url">Image URL:</label><br>
-        <input type="text" id="item_image_url" name="item_image_url" required><br><br>
-
-        <label for="item_price">Price:</label><br>
-        <input type="number" id="item_price" name="item_price" min="0" step="0.01" required><br><br>
-
-        <input type="submit" value="Add Item">
-    </form>
-
-    <?php else : ?>
-    <p>You do not have permission to access this page.</p>
+        <div class="form-group">
+            <label for="item_description">Description</label><br>
+            <textarea class="form-control"  id="item_description" name="item_description" rows="4" cols="50" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="item_image_url">Image URL</label><br>
+            <input class="form-control" type="text" id="item_image_url" name="item_image_url" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="item_price">Price</label><br>
+            <input class="form-control" type="number" id="item_price" name="item_price" min="0" step="0.01" required>
+        </div>
+        
+        <div class="form-group">
+            <input class="btn btn-primary" type="submit" value="Add Item">
+        </div>
+        </form>
+        
+    </div>
     <?php endif; ?>
-
+    
 </body>
 </html>
 

@@ -4,7 +4,76 @@
 body {
   font-family: "Cinzel", sans-serif;
   background-color: rgb(15 23 42);
-  display: flex;
-  height: 100vh;
   color: white;
+}
+
+.form-control {
+  font-family: "Rubik", sans-serif;
+}
+
+.navbar-brand {
+  font-family: "Rubik", sans-serif;
+}
+
+.create-item-div {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #1e293b;
+  margin: auto;
+  padding: 20px;
+}
+
+.create-item-div h2 {
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  color: darkgray;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+hr {
+  height: 1px;
+  background: linear-gradient(to right, transparent, white, transparent);
+}
+
+.navbar {
+  background-color: #1e293b;
+}
+
+.navbar-brand {
+  color: white;
+}
+
+.navbar-brand:hover {
+  color: red;
+}
+
+.item-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 70%;
+  padding: 64px;
+}
+
+.item {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  height: 256px;
+  width: 256px;
+}
+
+.item-image {
+  width: 128px;
+  height: 128px;
 }
