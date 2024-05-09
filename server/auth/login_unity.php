@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate credentials
     if (empty($username_err) && empty($password_err)) {
 
-        $sql = "SELECT id, username, password, gold FROM users WHERE BINARY username = ?";
+        $sql = "SELECT id, username, password, gold, score FROM users WHERE BINARY username = ?";
 
         if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param("s", $username);
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Check if username exists
                 if ($stmt->num_rows == 1) {
-                    $stmt->bind_result($id, $username, $hashed_password, $gold_value);
+                    $stmt->bind_result($id, $username, $hashed_password, $gold_value, $score_value);
                     if ($stmt->fetch()) {
                         // Verify hashed password
                         if (password_verify($password, $hashed_password)) {
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["username"] = $username;
 
                             // Successfully logged in
-                            echo "0\t" . $gold_value;
+                            echo "0\t" . $gold_value . "\t" . $score_value;
                             exit;
                         } else {
                             // Password is not valid
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 } else {
                     // Username doesn't exist
-                    die("3: Invalid username.");
+                    die("3: Invalid username or password.");
                 }
             } else {
                 echo "Something went wrong. Please try again later.";

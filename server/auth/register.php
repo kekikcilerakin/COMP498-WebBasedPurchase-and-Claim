@@ -2,12 +2,11 @@
 
 require_once "../connection.php";
 
-// Define variables and initialize with empty values
 $username = $password = "";
 $username_err = $password_err = "";
 
-// Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     // Validate username
     $username = trim($_POST["username"]);
     if (empty($username)) {
@@ -15,16 +14,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
         $username_err = "Username can only contain letters, numbers, and underscores.";
     } else {
-        // Prepare a select statement
         $sql = "SELECT id FROM users WHERE username = ?";
 
         if ($stmt = $conn->prepare($sql)) {
-            // Bind variables to the prepared statement as parameters
             $stmt->bind_param("s", $username);
 
-            // Attempt to execute the prepared statement
             if ($stmt->execute()) {
-                // store result
                 $stmt->store_result();
 
                 if ($stmt->num_rows == 1) {
@@ -35,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "Oops! Something went wrong. Please try again later.";
             }
 
-            // Close statement
             $stmt->close();
         }
     }
@@ -49,33 +43,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     }
 
-    // Check input errors before inserting in database
     if (empty($username_err) && empty($password_err)) {
-        // Prepare an insert statement
         $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
 
         if ($stmt = $conn->prepare($sql)) {
-            // Hash the password
+            // Hashing the password
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-            // Bind variables to the prepared statement as parameters
             $stmt->bind_param("ss", $username, $hashed_password);
 
-            // Attempt to execute the prepared statement
             if ($stmt->execute()) {
-                // Redirect to login page
                 header("location: login.php");
                 exit();
             } else {
                 echo "Oops! Something went wrong. Please try again later.";
             }
 
-            // Close statement
             $stmt->close();
         }
     }
 
-    // Close connection
     $conn->close();
 }
 ?>

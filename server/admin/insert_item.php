@@ -15,15 +15,12 @@ $itemDescription = mysqli_real_escape_string($conn, $_POST['item_description']);
 $itemImageUrl = mysqli_real_escape_string($conn, $_POST['item_image_url']);
 $itemPrice = floatval($_POST['item_price']);
 
-// Set session variables for image URL and price
 $_SESSION['item_image_url'] = $itemImageUrl;
 $_SESSION['item_price'] = $itemPrice;
 
 
-// Prepare SQL statement
 $sql = "INSERT INTO items (name, description, image_url, price) VALUES ('$itemName', '$itemDescription', '$itemImageUrl', '$itemPrice')";
 
-// Execute SQL statement
 if (mysqli_query($conn, $sql)) {
     echo "Records added successfully.";
 } else {

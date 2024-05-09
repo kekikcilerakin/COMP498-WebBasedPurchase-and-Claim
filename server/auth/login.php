@@ -13,7 +13,6 @@ require_once "../connection.php";
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
 
-// Process form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check if username is empty
@@ -28,9 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password_err = "Please enter your password.";
     }
 
-    // Validate credentials
     if (empty($username_err) && empty($password_err)) {
-
         $sql = "SELECT id, username, password FROM users WHERE BINARY username = ?";
 
         if ($stmt = $conn->prepare($sql)) {
@@ -51,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
 
-                            // Redirect user to welcome page
+                            // Redirect user to index page
                             header("location: ../index.php");
                             exit;
                         } else {
@@ -108,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Login">
             </div>
-            <p>Don't have an account? <a href="register.php">Sign up now.</a></p>
+            <p>Don't have an account?<a href="register.php">Sign up now.</a></p>
         </form>
     </div>
 </body>

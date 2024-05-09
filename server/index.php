@@ -21,19 +21,13 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 if(isset($_SESSION["username"])) {
     $username = $_SESSION["username"];
 
-    $sql = "SELECT gold, is_admin FROM users WHERE username = ?";
+    $sql = "SELECT gold, score, is_admin FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
-    $stmt->bind_result($gold_value, $is_admin);
+    $stmt->bind_result($gold_value, $score_value, $is_admin);
     $stmt->fetch();
     $stmt->close();
-
-    // if(isset($gold_value)) {
-    //     echo "Logged in as: $username <br> Gold: $gold_value<br>";
-    // } else {
-    //     echo "err: No gold value<br>";
-    // }
 
 } else {
     echo "Username not found in session";
@@ -55,7 +49,7 @@ if(isset($_SESSION["username"])) {
 <body>
     <nav class="navbar">
     <div class="container-fluid">
-        <a class="navbar-brand"><?php echo $username; ?> / Gold: <?php echo $gold_value; ?></a>
+        <a class="navbar-brand"><?php echo $username; ?> / Gold: <?php echo $gold_value; ?> / Score: <?php echo $score_value; ?></a>
         <form class="form-inline my-2 my-lg-0" action="" method="post">
         <input class="form-control mr-sm-2" type="submit" value="Logout">
         </form>

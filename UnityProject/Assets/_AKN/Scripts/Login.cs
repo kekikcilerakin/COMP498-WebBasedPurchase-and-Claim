@@ -2,7 +2,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
 
 public class Login : MonoBehaviour
 {
@@ -11,7 +10,18 @@ public class Login : MonoBehaviour
 
     public TMP_Text errorText;
 
-    public Button submitButton;
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            StartCoroutine(LoginPlayer());
+        }
+    }
+
+    public void GoToRegister()
+    {
+        Application.OpenURL("http://localhost/comp498/auth/register.php");
+    }
 
     public void CallLogin()
     {
@@ -29,16 +39,19 @@ public class Login : MonoBehaviour
 
         if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
         {
-            Debug.Log("Err:" + www.error);
+            errorText.text = "Error:" + www.error;
+            Debug.Log("Error:" + www.error);
         }
 
         if (www.downloadHandler.text.Length > 0 && www.downloadHandler.text[0] == '0')
         {
+            Debug.Log("www.downloadHandler.text" + www.downloadHandler.text);
             Debug.Log("Logged in successfully.");
 
             DBManager.username = nameField.text;
             DBManager.gold = int.Parse(www.downloadHandler.text.Split('\t')[1]);
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            DBManager.score = int.Parse(www.downloadHandler.text.Split('\t')[2]);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
         }
         else
         {
