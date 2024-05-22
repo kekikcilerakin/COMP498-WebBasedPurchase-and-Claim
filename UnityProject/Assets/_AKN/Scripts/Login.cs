@@ -50,7 +50,8 @@ public class Login : MonoBehaviour
 
             DBManager.username = nameField.text;
             DBManager.gold = int.Parse(www.downloadHandler.text.Split('\t')[1]);
-            DBManager.score = int.Parse(www.downloadHandler.text.Split('\t')[2]);
+            DBManager.level = int.Parse(www.downloadHandler.text.Split('\t')[2]);
+            DBManager.damage = int.Parse(www.downloadHandler.text.Split('\t')[3]);
             UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
         }
         else

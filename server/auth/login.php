@@ -40,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($stmt->num_rows == 1) {
                     $stmt->bind_result($id, $username, $hashed_password);
                     if ($stmt->fetch()) {
-                        // Verify hashed password
                         if (password_verify($password, $hashed_password)) {
                             // Password is correct, start a new session
                             session_start();

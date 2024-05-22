@@ -6,15 +6,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $username = trim($_POST["username"]);
     $newGold = $_POST["gold"];
-    $newScore = $_POST["score"];
+    $newLevel = $_POST["level"];
 
-    $sql = "UPDATE users SET gold = ?, score = ? WHERE username = ?";
+    $sql = "UPDATE users SET gold = ?, level = ? WHERE username = ?";
 
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("iis", $newGold, $newScore, $username);
+        $stmt->bind_param("iis", $newGold, $newLevel, $username);
 
         if (!$stmt->execute()) {
-            echo "Failed to update gold and score.";
+            echo "Failed to update gold and level.";
         }
 
         $stmt->close();

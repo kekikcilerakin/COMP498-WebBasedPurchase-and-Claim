@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate credentials
     if (empty($username_err) && empty($password_err)) {
 
-        $sql = "SELECT id, username, password, gold, score FROM users WHERE BINARY username = ?";
+        $sql = "SELECT id, username, password, gold, level, damage FROM users WHERE BINARY username = ?";
 
         if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param("s", $username);
@@ -33,9 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Check if username exists
                 if ($stmt->num_rows == 1) {
-                    $stmt->bind_result($id, $username, $hashed_password, $gold_value, $score_value);
+                    $stmt->bind_result($id, $username, $hashed_password, $gold_value, $level_value, $damage_value);
                     if ($stmt->fetch()) {
-                        // Verify hashed password
                         if (password_verify($password, $hashed_password)) {
                             // Password is correct, start a new session
                             session_start();
@@ -43,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
 
-                            // Successfully logged in
-                            echo "0\t" . $gold_value . "\t" . $score_value;
+                            // Send data to Unity
+                            echo "0\t" . $gold_value . "\t" . $level_value . "\t" . $damage_value;
                             exit;
                         } else {
                             // Password is not valid

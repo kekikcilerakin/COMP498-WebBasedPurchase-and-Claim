@@ -24,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if ($stmt->num_rows == 1) {
                     $username_err = "This username is already taken.";
-
                 }
             } else {
                 echo "Oops! Something went wrong. Please try again later.";
@@ -47,7 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
 
         if ($stmt = $conn->prepare($sql)) {
-            // Hashing the password
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
             $stmt->bind_param("ss", $username, $hashed_password);

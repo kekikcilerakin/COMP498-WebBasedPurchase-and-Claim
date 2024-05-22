@@ -21,11 +21,11 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 if(isset($_SESSION["username"])) {
     $username = $_SESSION["username"];
 
-    $sql = "SELECT gold, score, is_admin FROM users WHERE username = ?";
+    $sql = "SELECT gold, level, is_admin, damage, crit_chance, auto_click, gold_multiplier FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
-    $stmt->bind_result($gold_value, $score_value, $is_admin);
+    $stmt->bind_result($gold_value, $level_value, $is_admin, $damage, $crit_chance, $auto_click, $gold_multiplier);
     $stmt->fetch();
     $stmt->close();
 
@@ -49,34 +49,64 @@ if(isset($_SESSION["username"])) {
 <body>
     <nav class="navbar">
     <div class="container-fluid">
-        <a class="navbar-brand"><?php echo $username; ?> / Gold: <?php echo $gold_value; ?> / Score: <?php echo $score_value; ?></a>
+        <a class="navbar-brand"><?php echo $username; ?> / Gold: <?php echo $gold_value; ?></a>
         <form class="form-inline my-2 my-lg-0" action="" method="post">
         <input class="form-control mr-sm-2" type="submit" value="Logout">
         </form>
     </div>
     </nav>
 
+    <?php if (isset($_GET['success'])): ?>
+        <div class="alert alert-success" role="alert">
+            Purchase successful!
+        </div>
+    <?php elseif (isset($_GET['error'])): ?>
+        <div class="alert alert-danger" role="alert">
+            <?php if ($_GET['error'] == 'not_enough_gold'): ?>
+                Not enough gold to purchase this item.
+            <?php endif; ?>
+        </div>
+    <?php else: ?>
+        <div class="alert" role="alert">
+            .
+        </div>
+    <?php endif; ?>
+
 <?php
-$itemsQuery = "SELECT name, description, image_url, price FROM items";
+$itemsQuery = "SELECT id, name, description, image_url, price FROM items";
 $result = $conn->query($itemsQuery);
 ?>
 
-<div class="item-container">
-    <?php if ($result->num_rows > 0): ?>
-        <?php foreach ($result as $item): ?>
-            <div class="item">
-                <img class="item-image" src="<?php echo $item['image_url']; ?>">
-                <br>
-                <h5><?php echo $item['name']; ?></h5>
-                <h6>Price: <?php echo $item['price']; ?></h6>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</div>
+    <div class="item-container">
+        <?php if ($result->num_rows > 0): ?>
+            <?php foreach ($result as $item): ?>
+                <div class="item">
+                    <!-- <img class="item-image" src="<?php echo $item['image_url']; ?>">
+                    <br> -->
+                    <h5><?php echo $item['name']; ?></h5>
+                    <h6> Price: <a class="price"><?php echo $item['price']; ?> Gold </a></h6>
+                    <!-- <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Buy">
+                    </div> -->
+                    <form action="buy_item.php" method="post">
+                        <input type="hidden" name="item_id" value="<?php echo $item['id']; ?>">
+                        <input type="submit" class="btn btn-primary" value="Buy">
+                    </form>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
 
 
+    <div class="player-stats">
+        <h1>Player Stats</h1>
+        <h5>Increased Click Damage: <?php echo $damage; ?></h5>
+        <h5>Critical Hit Chance: <?php echo $crit_chance; ?></h5>
+        <h5>Auto Clicker: <?php echo $auto_click; ?></h5>
+        <h5>Gold Multiplier: <?php echo $gold_multiplier; ?></h5>
+    </div>
 
-    <?php if ($is_admin) : ?>
+    <!-- <?php if ($is_admin) : ?>
     <div class="create-item-div">
         <h2>Create a New Item</h2>
         <hr>
@@ -99,7 +129,7 @@ $result = $conn->query($itemsQuery);
         
         <div class="form-group">
             <label for="item_price">Price</label><br>
-            <input class="form-control" type="number" id="item_price" name="item_price" min="0" step="0.01" required>
+            <input class="form-control" type="number" id="item_price" name="item_price" min="0" step="1" required>
         </div>
         
         <div class="form-group">
@@ -108,7 +138,7 @@ $result = $conn->query($itemsQuery);
         </form>
         
     </div>
-    <?php endif; ?>
+    <?php endif; ?> -->
     
 </body>
 </html>

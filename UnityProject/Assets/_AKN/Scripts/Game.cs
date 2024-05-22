@@ -6,16 +6,19 @@ using UnityEngine.Networking;
 public class Game : MonoBehaviour
 {
     [SerializeField] private TMP_Text usernameDispay;
-    [SerializeField] private TMP_Text goldDispay;
-    [SerializeField] private TMP_Text scoreDispay;
+    [SerializeField] private TMP_Text goldDisplay;
+    [SerializeField] private TMP_Text levelDisplay;
+    public TMP_Text eggHealthDisplay;
+
+    [SerializeField] private Egg egg;
 
     private void Awake()
     {
         if (DBManager.username == null) UnityEngine.SceneManagement.SceneManager.LoadScene("Login");
 
         usernameDispay.text = "Player: " + DBManager.username;
-        goldDispay.text = "Gold: " + DBManager.gold;
-        scoreDispay.text = DBManager.score.ToString();
+        goldDisplay.text = "Gold: " + DBManager.gold.ToString();
+        levelDisplay.text = "Level: " + DBManager.level.ToString();
     }
 
     public void CallSaveData()
@@ -28,7 +31,7 @@ public class Game : MonoBehaviour
         WWWForm form = new WWWForm();
         form.AddField("username", DBManager.username);
         form.AddField("gold", DBManager.gold);
-        form.AddField("score", DBManager.score);
+        form.AddField("level", DBManager.level);
 
         UnityWebRequest www = UnityWebRequest.Post("http://localhost/comp498/savedata.php", form);
         yield return www.SendWebRequest();
@@ -46,12 +49,28 @@ public class Game : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene("Login");
     }
 
-    public void IncreaseStats()
+    public void OnEggClick()
     {
         DBManager.gold++;
-        DBManager.score++;
+        if (egg.TakeDamage(DBManager.damage))
+        {
+            NextLevel();
+        }
 
-        goldDispay.text = "Gold: " + DBManager.gold;
-        scoreDispay.text = DBManager.score.ToString();
+        goldDisplay.text = "Gold: " + DBManager.gold;
+        eggHealthDisplay.text = egg.curHealth.ToString();
+    }
+
+    private void NextLevel()
+    {
+        DBManager.level++;
+        levelDisplay.text = "Level: " + DBManager.level;
+
+        egg.ResetEgg();
+    }
+
+    public void GoToMarket()
+    {
+        Application.OpenURL("http://localhost/comp498/index.php");
     }
 }
