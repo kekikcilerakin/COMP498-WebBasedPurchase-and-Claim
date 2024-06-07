@@ -23,11 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 
     // Fetch user's current gold and stats
-    $sql = "SELECT gold, damage, crit_chance, auto_click, gold_multiplier FROM users WHERE username = ?";
+    $sql = "SELECT gold, damage, crit_chance, auto_click_damage, gold_multiplier FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
-    $stmt->bind_result($gold, $damage, $crit_chance, $auto_click, $gold_multiplier);
+    $stmt->bind_result($gold, $damage, $crit_chance, $auto_click_damage, $gold_multiplier);
     $stmt->fetch();
     $stmt->close();
 
@@ -37,18 +37,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $new_gold = $gold - $item_price;
         $new_damage = $damage;
         $new_crit_chance = $crit_chance;
-        $new_auto_click = $auto_click;
+        $new_auto_click_damage = $auto_click_damage;
         $new_gold_multiplier = $gold_multiplier;
 
         switch ($item_name) {
-            case 'Increased Click Damage':
+            case 'Click Damage':
                 $new_damage += 1;
                 break;
             case 'Critical Hit Chance':
                 $new_crit_chance += 1;
                 break;
-            case 'Auto Clicker':
-                $new_auto_click += 1;
+            case 'Auto Click Damage':
+                $new_auto_click_damage += 1;
                 break;
             case 'Gold Multiplier':
                 $new_gold_multiplier += 1;
@@ -58,9 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 break;
         }
 
-        $sql = "UPDATE users SET gold = ?, damage = ?, crit_chance = ?, auto_click = ?, gold_multiplier = ? WHERE username = ?";
+        $sql = "UPDATE users SET gold = ?, damage = ?, crit_chance = ?, auto_click_damage = ?, gold_multiplier = ? WHERE username = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iiidis", $new_gold, $new_damage, $new_crit_chance, $new_auto_click, $new_gold_multiplier, $username);
+        $stmt->bind_param("iiidis", $new_gold, $new_damage, $new_crit_chance, $new_auto_click_damage, $new_gold_multiplier, $username);
         $stmt->execute();
         $stmt->close();
 
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["gold"] = $new_gold;
         $_SESSION["damage"] = $new_damage;
         $_SESSION["crit_chance"] = $new_crit_chance;
-        $_SESSION["auto_click"] = $new_auto_click;
+        $_SESSION["auto_click_damage"] = $new_auto_click_damage;
         $_SESSION["gold_multiplier"] = $new_gold_multiplier;
 
         header("Location: index.php?success=1");

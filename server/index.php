@@ -21,11 +21,11 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 if(isset($_SESSION["username"])) {
     $username = $_SESSION["username"];
 
-    $sql = "SELECT gold, level, is_admin, damage, crit_chance, auto_click, gold_multiplier FROM users WHERE username = ?";
+    $sql = "SELECT gold, level, is_admin, damage, crit_chance, auto_click_damage, gold_multiplier FROM users WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();
-    $stmt->bind_result($gold_value, $level_value, $is_admin, $damage, $crit_chance, $auto_click, $gold_multiplier);
+    $stmt->bind_result($gold_value, $level_value, $is_admin, $damage, $crit_chance, $auto_click_damage, $gold_multiplier);
     $stmt->fetch();
     $stmt->close();
 
@@ -100,9 +100,9 @@ $result = $conn->query($itemsQuery);
 
     <div class="player-stats">
         <h1>Player Stats</h1>
-        <h5>Increased Click Damage: <?php echo $damage; ?></h5>
+        <h5>Click Damage: <?php echo $damage; ?></h5>
         <h5>Critical Hit Chance: <?php echo $crit_chance; ?></h5>
-        <h5>Auto Clicker: <?php echo $auto_click; ?></h5>
+        <h5>Auto Click Damage: <?php echo $auto_click_damage; ?></h5>
         <h5>Gold Multiplier: <?php echo $gold_multiplier; ?></h5>
     </div>
 
