@@ -21,6 +21,11 @@ public class Game : MonoBehaviour
         levelDisplay.text = "Level: " + DBManager.level.ToString();
     }
 
+    private void Start()
+    {
+        InvokeRepeating(nameof(OnEggAutoClick), 1.0f, 1.0f);
+    }
+
     public void CallSaveData()
     {
         StartCoroutine(SavePlayerData());
@@ -52,13 +57,25 @@ public class Game : MonoBehaviour
     public void OnEggClick()
     {
         DBManager.gold++;
-        if (egg.TakeDamage(DBManager.damage))
+        if (egg.TakeDamage(DBManager.damage, false))
         {
             NextLevel();
         }
 
         goldDisplay.text = "Gold: " + DBManager.gold;
-        eggHealthDisplay.text = egg.curHealth.ToString();
+        eggHealthDisplay.text = ((int)egg.curHealth).ToString();
+    }
+    public void OnEggAutoClick()
+    {
+        Debug.Log("Auto click for " + DBManager.autoClickDamage + " damage.");
+        DBManager.gold++;
+        if (egg.TakeDamage(DBManager.autoClickDamage, true))
+        {
+            NextLevel();
+        }
+
+        goldDisplay.text = "Gold: " + DBManager.gold;
+        eggHealthDisplay.text = ((int)egg.curHealth).ToString();
     }
 
     private void NextLevel()

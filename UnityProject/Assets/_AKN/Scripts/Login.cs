@@ -45,13 +45,15 @@ public class Login : MonoBehaviour
 
         if (www.downloadHandler.text.Length > 0 && www.downloadHandler.text[0] == '0')
         {
-            Debug.Log("www.downloadHandler.text" + www.downloadHandler.text);
+            Debug.Log("Values from Database: " + www.downloadHandler.text);
             Debug.Log("Logged in successfully.");
 
             DBManager.username = nameField.text;
             DBManager.gold = int.Parse(www.downloadHandler.text.Split('\t')[1]);
             DBManager.level = int.Parse(www.downloadHandler.text.Split('\t')[2]);
             DBManager.damage = int.Parse(www.downloadHandler.text.Split('\t')[3]);
+            DBManager.critChance = int.Parse(www.downloadHandler.text.Split('\t')[4]);
+            DBManager.autoClickDamage = int.Parse(www.downloadHandler.text.Split('\t')[5]);
             UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
         }
         else

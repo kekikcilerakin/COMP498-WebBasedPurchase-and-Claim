@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Egg : MonoBehaviour
 {
     [SerializeField] private Game game;
+    [SerializeField] private DamagePopupManager damagePopupManager;
     private RectTransform eggTransform;
     private Vector3 initialScale;
     private Quaternion initialRotation;
 
     [SerializeField] private float maxHealth = 10;
     public float curHealth = 10;
-    private int regenPerSecond = 1;
+    private float regenPerSecond = 1;
 
     [SerializeField] private int healthMultiplier = 10;
-    [SerializeField] private int regenMultiplier = 1;
+    [SerializeField] private float regenMultiplier = 1;
 
     [SerializeField] private Image healthBar;
 
@@ -92,16 +95,19 @@ public class Egg : MonoBehaviour
         this.GetComponent<Image>().color = eggColors[DBManager.level - 1];
     }
 
-    public void OnMouseDown()
+    private void PlayClickAnimation()
     {
         eggTransform.localScale = initialScale * shrinkFactor;
 
         float randomRotationOffset = Random.Range(-maxRotationOffset, maxRotationOffset);
         eggTransform.Rotate(Vector3.forward, randomRotationOffset);
+
+        Invoke(nameof(RevertEggScaleAndRotation), 0.05f);
     }
 
-    public void OnMouseUp()
+    private void RevertEggScaleAndRotation()
     {
+        //Revert scale and roration to default values.
         eggTransform.localScale = initialScale;
         eggTransform.rotation = initialRotation;
     }
@@ -127,16 +133,27 @@ public class Egg : MonoBehaviour
             healthBar.fillAmount = curHealth / maxHealth;
         }
 
-        game.eggHealthDisplay.text = curHealth.ToString();
+        game.eggHealthDisplay.text = ((int)curHealth).ToString();
     }
 
-    public bool TakeDamage(int dmg)
+    public bool TakeDamage(int dmg, bool isAutoClick)
     {
+        PlayClickAnimation();
+        damagePopupManager.InstantiateDamagePopup(dmg);
+
+        if (!isAutoClick)
+        {
+            damagePopupManager.InstantiateSlashImage();
+
+        }
+
         curHealth -= dmg;
         healthBar.fillAmount = curHealth / maxHealth;
 
         return curHealth <= 0;
+
     }
+
 
     public void ResetEgg()
     {

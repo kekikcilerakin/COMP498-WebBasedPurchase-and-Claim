@@ -679,6 +679,7 @@ GameObject:
   - component: {fileID: 671299969}
   - component: {fileID: 671299968}
   - component: {fileID: 671299972}
+  - component: {fileID: 671299973}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -793,6 +794,23 @@ MonoBehaviour:
   levelDisplay: {fileID: 417201859}
   eggHealthDisplay: {fileID: 1504752604}
   egg: {fileID: 1863897054}
+--- !u!114 &671299973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671299967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b60be323adc305a41ac1c85b39bc444d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagePopupPrefab: {fileID: 4578961611419746898, guid: b3377c333363c73458b2be440f709751, type: 3}
+  slashImagePrefab: {fileID: 6045595268965365071, guid: 93f611013231a3f4ab318b0be4baa9a2, type: 3}
+  canvas: {fileID: 671299970}
+  floatDuration: 1
+  floatSpeed: 100
 --- !u!1 &736351063
 GameObject:
   m_ObjectHideFlags: 0
@@ -1755,7 +1773,6 @@ GameObject:
   - component: {fileID: 1863897053}
   - component: {fileID: 1863897052}
   - component: {fileID: 1863897051}
-  - component: {fileID: 1863897055}
   - component: {fileID: 1863897054}
   m_Layer: 5
   m_Name: Egg
@@ -1890,60 +1907,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   game: {fileID: 671299972}
+  damagePopupManager: {fileID: 671299973}
   maxHealth: 10
   curHealth: 10
-  regenPerSecond: 1
   healthMultiplier: 10
-  regenMultiplier: 1
+  regenMultiplier: 1.25
   healthBar: {fileID: 399964040}
   eggColors: []
   shrinkFactor: 0.95
   maxRotationOffset: 5
---- !u!114 &1863897055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1863897049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1863897054}
-          m_TargetAssemblyTypeName: Egg, Assembly-CSharp
-          m_MethodName: OnMouseDown
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1863897054}
-          m_TargetAssemblyTypeName: Egg, Assembly-CSharp
-          m_MethodName: OnMouseUp
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
