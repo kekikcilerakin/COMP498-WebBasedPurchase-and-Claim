@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -10,16 +9,22 @@ public class DamagePopupManager : MonoBehaviour
     [SerializeField] private Canvas canvas;
     [SerializeField] private float floatDuration = 1.0f;
     [SerializeField] private float floatSpeed = 50.0f;
+    [SerializeField] private Transform eggRegenPopupPosition;
+    [SerializeField] private Transform autoDamagePopupPosition;
 
 
-    public void InstantiateDamagePopup(int dmg)
+    public void InstantiateDamagePopup(int dmg, bool isRegen, bool isAutoDamage)
     {
-        Vector3 mousePosition = Input.mousePosition;
+
+        Vector3 position = isRegen ? eggRegenPopupPosition.position : (isAutoDamage ? autoDamagePopupPosition.position : Input.mousePosition);
+        string text = (isRegen ? "+" : "-") + dmg.ToString();
+        Color color = isRegen ? Color.red : Color.green;
+
         GameObject dmgPopup = Instantiate(damagePopupPrefab, canvas.transform);
-
-        dmgPopup.GetComponent<TMP_Text>().text = dmg.ToString();
-        dmgPopup.transform.position = mousePosition;
-
+        TMP_Text popupText = dmgPopup.GetComponent<TMP_Text>();
+        popupText.color = color;
+        popupText.text = text;
+        dmgPopup.transform.position = position;
 
         StartCoroutine(FloatAndDestroy(dmgPopup));
     }

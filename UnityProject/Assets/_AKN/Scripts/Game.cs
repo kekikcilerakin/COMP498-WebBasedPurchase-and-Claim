@@ -67,7 +67,6 @@ public class Game : MonoBehaviour
     }
     public void OnEggAutoClick()
     {
-        Debug.Log("Auto click for " + DBManager.autoClickDamage + " damage.");
         DBManager.gold++;
         if (egg.TakeDamage(DBManager.autoClickDamage, true))
         {
@@ -89,5 +88,10 @@ public class Game : MonoBehaviour
     public void GoToMarket()
     {
         Application.OpenURL("http://localhost/comp498/index.php");
+    }
+
+    public void StartBonus()
+    {
+
     }
 }
