@@ -26,7 +26,6 @@ public class Egg : MonoBehaviour
     private void Start()
     {
         eggTransform = GetComponent<RectTransform>();
-        initialScale = eggTransform.localScale;
         initialRotation = eggTransform.rotation;
 
         maxHealth = curHealth = DBManager.level * healthMultiplier;
@@ -34,7 +33,7 @@ public class Egg : MonoBehaviour
 
         StartCoroutine(RegenerateHealth());
 
-        SetRandomEggColor();
+        SetRandomEggColorAndScale();
     }
 
     private void PlayClickAnimation()
@@ -101,13 +100,18 @@ public class Egg : MonoBehaviour
         maxHealth = curHealth = DBManager.level * healthMultiplier;
         regenPerSecond = DBManager.level * regenMultiplier;
 
-        SetRandomEggColor();
+        SetRandomEggColorAndScale();
 
         healthBar.fillAmount = 1;
     }
 
-    public void SetRandomEggColor()
+    public void SetRandomEggColorAndScale()
     {
+        float randomScale = Random.Range(1f, 1.25f);
+        eggTransform.localScale = new Vector3(randomScale, randomScale, 1f);
+
+        initialScale = eggTransform.localScale;
+
         Color _color = new Color(Random.value, Random.value, Random.value);
 
         healthBar.color = _color;

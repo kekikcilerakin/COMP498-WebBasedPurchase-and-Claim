@@ -15,6 +15,7 @@ public class DamagePopupManager : MonoBehaviour
 
     public void InstantiateDamagePopup(int dmg, bool isRegen, bool isAutoDamage)
     {
+        if (dmg == 0) return;
 
         Vector3 position = isRegen ? eggRegenPopupPosition.position : (isAutoDamage ? autoDamagePopupPosition.position : Input.mousePosition);
         string text = (isRegen ? "+" : "-") + dmg.ToString();

@@ -10,6 +10,11 @@ public class Login : MonoBehaviour
 
     public TMP_Text errorText;
 
+    private void Start()
+    {
+        nameField.text = PlayerPrefs.GetString("username", "");
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
@@ -47,6 +52,9 @@ public class Login : MonoBehaviour
         {
             Debug.Log("Values from Database: " + www.downloadHandler.text);
             Debug.Log("Logged in successfully.");
+
+            PlayerPrefs.SetString("username", nameField.text);
+            PlayerPrefs.Save();
 
             DBManager.username = nameField.text;
             DBManager.gold = int.Parse(www.downloadHandler.text.Split('\t')[1]);
