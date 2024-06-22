@@ -6,6 +6,7 @@ public static class DBManager
     public static int damage;
     public static int critChance;
     public static int autoClickDamage;
+    public static int goldMultiplier;
 
     public static bool LoggedIn { get { return username != null; } }
 

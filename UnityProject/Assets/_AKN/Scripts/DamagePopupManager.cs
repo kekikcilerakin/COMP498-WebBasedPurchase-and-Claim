@@ -18,8 +18,9 @@ public class DamagePopupManager : MonoBehaviour
         if (dmg == 0) return;
 
         Vector3 position = isRegen ? eggRegenPopupPosition.position : (isAutoDamage ? autoDamagePopupPosition.position : Input.mousePosition);
-        string text = (isRegen ? "+" : "-") + dmg.ToString();
-        Color color = isRegen ? Color.red : Color.green;
+        string text = dmg.ToString();
+        //string text = (isRegen ? "+" : "-") + dmg.ToString();
+        Color color = isRegen ? Color.green : Color.red;
 
         GameObject dmgPopup = Instantiate(damagePopupPrefab, canvas.transform);
         TMP_Text popupText = dmgPopup.GetComponent<TMP_Text>();

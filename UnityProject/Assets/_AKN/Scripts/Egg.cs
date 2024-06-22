@@ -91,7 +91,6 @@ public class Egg : MonoBehaviour
         healthBar.fillAmount = curHealth / maxHealth;
 
         return curHealth <= 0;
-
     }
 
 

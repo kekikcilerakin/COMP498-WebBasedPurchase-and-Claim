@@ -62,6 +62,7 @@ public class Login : MonoBehaviour
             DBManager.damage = int.Parse(www.downloadHandler.text.Split('\t')[3]);
             DBManager.critChance = int.Parse(www.downloadHandler.text.Split('\t')[4]);
             DBManager.autoClickDamage = int.Parse(www.downloadHandler.text.Split('\t')[5]);
+            DBManager.goldMultiplier = int.Parse(www.downloadHandler.text.Split('\t')[6]);
             UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
         }
         else

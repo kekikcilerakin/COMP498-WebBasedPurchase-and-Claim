@@ -56,23 +56,32 @@ public class Game : MonoBehaviour
 
     public void OnEggClick()
     {
-        DBManager.gold++;
-        if (egg.TakeDamage(DBManager.damage, false))
+        DBManager.gold += DBManager.goldMultiplier;
+
+        int damageDealt = IsCritical() ? DBManager.damage * 2 : DBManager.damage;
+
+        if (egg.TakeDamage(damageDealt, false))
         {
             NextLevel();
         }
 
-        goldDisplay.text = "Gold: " + DBManager.gold;
-        eggHealthDisplay.text = ((int)egg.curHealth).ToString();
+        UpdateUI();
     }
+
     public void OnEggAutoClick()
     {
-        DBManager.gold++;
+        DBManager.gold += DBManager.goldMultiplier;
+
         if (egg.TakeDamage(DBManager.autoClickDamage, true))
         {
             NextLevel();
         }
 
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
         goldDisplay.text = "Gold: " + DBManager.gold;
         eggHealthDisplay.text = ((int)egg.curHealth).ToString();
     }
@@ -93,5 +102,19 @@ public class Game : MonoBehaviour
     public void StartBonus()
     {
 
+    }
+
+    private bool IsCritical()
+    {
+        float randomNum = Random.Range(0f, 1f);
+
+        if (randomNum <= DBManager.critChance / 100f)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
