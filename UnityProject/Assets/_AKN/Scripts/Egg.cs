@@ -13,6 +13,7 @@ public class Egg : MonoBehaviour
     [SerializeField] private float maxHealth = 10;
     public float curHealth = 10;
     private float regenPerSecond = 1;
+    private float regenRange = 5;
 
     [SerializeField] private int healthMultiplier = 10;
     [SerializeField] private float regenMultiplier = 1;
@@ -23,13 +24,14 @@ public class Egg : MonoBehaviour
     [SerializeField] private float shrinkFactor = 0.9f;
     [SerializeField] private float maxRotationOffset = 5f;
 
+
     private void Start()
     {
         eggTransform = GetComponent<RectTransform>();
         initialRotation = eggTransform.rotation;
 
         maxHealth = curHealth = DBManager.level * healthMultiplier;
-        regenPerSecond = DBManager.level * regenMultiplier;
+        //regenPerSecond = DBManager.level * regenMultiplier;
 
         StartCoroutine(RegenerateHealth());
 
@@ -63,9 +65,17 @@ public class Egg : MonoBehaviour
 
     private void Regenerate()
     {
+
+        float minRegen = DBManager.level - regenRange;
+        float maxRegen = DBManager.level + regenRange;
+
+        float regenAmount = Random.Range(minRegen, maxRegen);
+
+        regenAmount = Mathf.Max(regenAmount, 0);
+
         if (curHealth < maxHealth)
         {
-            curHealth += regenPerSecond;
+            curHealth += regenAmount;
             if (curHealth > maxHealth)
             {
                 curHealth = maxHealth;
@@ -73,7 +83,7 @@ public class Egg : MonoBehaviour
             healthBar.fillAmount = curHealth / maxHealth;
         }
 
-        damagePopupManager.InstantiateDamagePopup((int)regenPerSecond, true, false);
+        damagePopupManager.InstantiateDamagePopup((int)regenAmount, true, false);
         game.eggHealthDisplay.text = ((int)curHealth).ToString();
     }
 

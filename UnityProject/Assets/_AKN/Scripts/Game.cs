@@ -12,13 +12,13 @@ public class Game : MonoBehaviour
 
     [SerializeField] private Egg egg;
 
+    private int autoDamageRange = 5;
+
     private void Awake()
     {
         if (DBManager.username == null) UnityEngine.SceneManagement.SceneManager.LoadScene("Login");
 
-        usernameDispay.text = "Player: " + DBManager.username;
-        goldDisplay.text = "Gold: " + DBManager.gold.ToString();
-        levelDisplay.text = "Level: " + DBManager.level.ToString();
+        UpdateUI();
     }
 
     private void Start()
@@ -70,9 +70,16 @@ public class Game : MonoBehaviour
 
     public void OnEggAutoClick()
     {
+        int minAutoDamage = DBManager.autoClickDamage - autoDamageRange;
+        int maxAutoDamage = DBManager.autoClickDamage + autoDamageRange;
+
+        int autoDamageAmount = Random.Range(minAutoDamage, maxAutoDamage);
+
+        autoDamageAmount = Mathf.Max(autoDamageAmount, 0);
+
         DBManager.gold += DBManager.goldMultiplier;
 
-        if (egg.TakeDamage(DBManager.autoClickDamage, true))
+        if (egg.TakeDamage(autoDamageAmount, true))
         {
             NextLevel();
         }
@@ -82,14 +89,16 @@ public class Game : MonoBehaviour
 
     private void UpdateUI()
     {
+        usernameDispay.text = "Player: " + DBManager.username;
         goldDisplay.text = "Gold: " + DBManager.gold;
         eggHealthDisplay.text = ((int)egg.curHealth).ToString();
+        levelDisplay.text = "Level: " + DBManager.level;
     }
 
     private void NextLevel()
     {
         DBManager.level++;
-        levelDisplay.text = "Level: " + DBManager.level;
+        UpdateUI();
 
         egg.ResetEgg();
     }
@@ -97,11 +106,6 @@ public class Game : MonoBehaviour
     public void GoToMarket()
     {
         Application.OpenURL("http://localhost/comp498/index.php");
-    }
-
-    public void StartBonus()
-    {
-
     }
 
     private bool IsCritical()
